@@ -4,7 +4,9 @@ const { pinyin } = require('pinyin-pro');
 const axios = require("axios");
 
 let rawData = fs.readFileSync("country.json");
+let rawDataEN = fs.readFileSync("country-en.json");
 let object = JSON.parse(rawData);
+let objectEN = JSON.parse(rawDataEN);
 let countryArray =[]
 for (const key in object) {
     if (Object.hasOwnProperty.call(object, key)) {
@@ -12,9 +14,17 @@ for (const key in object) {
         countryArray =  countryArray.concat(element)
     }
 }
+let countryArrayEN =[]
+for (const key in objectEN) {
+    if (Object.hasOwnProperty.call(objectEN, key)) {
+        const element = objectEN[key];
+        countryArrayEN =  countryArrayEN.concat(element)
+    }
+}
 for (let i = 0; i < countryArray.length; i++) {
     let countryArrayElement = countryArray[i];
-    let collection = {"index":i,"countryCode": countryArrayElement["N"], "countryNameCN":countryArrayElement["C"], "countryNameAbbreviate":countryArrayElement["B"]}
+    let countryArrayElementEN = countryArrayEN[i];
+    let collection = {"index":i,"countryCode": countryArrayElement["N"], "countryNameCN":countryArrayElement["C"], "countryNameEN":countryArrayElementEN["C"], "countryNameAbbreviate":countryArrayElement["B"]}
     const fileName = prefixIntrger(i, 3) + "." + pinyin(countryArrayElement["C"], { toneType: 'none' }).replaceAll(" ", "") + ".png";
     const saveAs = "download/" + fileName;
     // console.log("mv ", i +"."+ pinyin(countryArrayElement["C"], { toneType: 'none' }).replaceAll(" ", "") + ".png "+fileName)
